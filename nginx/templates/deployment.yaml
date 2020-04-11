@@ -33,7 +33,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: phpkube-data
-              mountPath: "/home/phpkube/html"
+              mountPath: "/home/phpkube"
           livenessProbe:
             httpGet:
               path: /
