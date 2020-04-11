@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.global.phpkubeReleaseName -}}-data
+spec:
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  accessModes:
+    - ReadWriteMany
+  {{ if .Values.persistentVolume.storageClassName  }}
+  storageClassName: {{ .Values.persistentVolume.storageClassName | quote }}
+  {{ end }}

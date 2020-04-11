@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "phpkube.fullname" . }}-gitclone-sh
+data:
+  gitclone.sh: |-
+    #!/bin/sh
+
+    echo "gitclone starting"
+    pwd
+    ls -hls
+    mkdir -p html
+    mkdir -p log
+    mkdir -p run
+    mkdir -p temp/src
+    mkdir -p var
+    cd temp/src
+    git clone {{ .Values.git.url }} .
+    git checkout {{ .Values.git.branch }}
+    ls -hls
+    ls -hls ../
+    ls -hls ../../
+    cp -rf * ../../html
+    rm -rf ../*.*

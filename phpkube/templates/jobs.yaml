@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "phpkube.fullname" . }}
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: gitclone
+        image: alpine/git
+        workingDir: "/home/"
+        command: ["/bin/sh"]
+        args: ["-c", "/home/gitclone.sh"]
+        volumeMounts:
+            - name: phpkube-data
+              mountPath: "/home/"
+            - name: gitclone-sh
+              mountPath: "/home/gitclone.sh"
+              subPath: "gitclone.sh"              
+      containers:
+      {{- if .Values.jobs.composer }}
+      - name: composer
+        image: composer
+        workingDir: "/home/html"
+        command: ["/bin/sh", "-c", "/home/html/composer.sh"]
+        volumeMounts:
+            - name: phpkube-data
+              mountPath: "/home/"
+            - name: scripts
+              mountPath: "/home/html/composer.sh"
+              subPath: "composer.sh"
+      {{- end -}}
+      {{- if .Values.jobs.npm }}
+      - name: npm
+        image: node
+        workingDir: "/home/html"
+        command: ["/bin/sh", "-c", "/home/html/npm.sh"]
+        volumeMounts:
+            - name: phpkube-data
+              mountPath: "/home/"
+            - name: scripts
+              mountPath: "/home/html/npm.sh"
+              subPath: "npm.sh"
+      {{- end }}
+      restartPolicy: Never
+      volumes:
+      - name: phpkube-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.global.phpkubeReleaseName -}}-data
+      - name: gitclone-sh
+        configMap: 
+          defaultMode: 0555
+          name: {{ include "phpkube.fullname" . }}-gitclone-sh
+      - name: scripts
+        configMap:
+          defaultMode: 0555 
+          name: {{ include "phpkube.fullname" . }}-scripts
+  backoffLimit: 4

@@ -1,0 +1,17 @@
+# Default values for phpkube.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+persistentVolume:
+  storageClassName: 
+
+git:
+  url: https://github.com/laravel/laravel.git
+  branch: master
+
+jobs:
+  composer: true
+  npm: true
+
+global:
+  phpkubeReleaseName: "phpkube"
