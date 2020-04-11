@@ -1,0 +1,36 @@
+apiVersion: v1
+entries:
+  nginx:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2020-04-11T19:08:49.173448355+06:30"
+    description: A Helm chart for Kubernetes
+    digest: 20d1bca219ae1dfcba0c9fe23ba8fb8a9836898f2923bf377c02c5bd6fef45df
+    name: nginx
+    type: application
+    urls:
+    - https://phpkube.github.io/charts/nginx.tgz
+    version: 0.1.0
+  php-fpm:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2020-04-11T19:08:49.173835275+06:30"
+    description: A Helm chart for Kubernetes
+    digest: f9aedaa3da9a34affc222630784bda955f18857089c1c8b0a7b0ee5513adf5e0
+    name: php-fpm
+    type: application
+    urls:
+    - https://phpkube.github.io/charts/php-fpm.tgz
+    version: 0.1.0
+  phpkube:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2020-04-11T19:08:49.174100113+06:30"
+    description: Main Helm chart for phpkube
+    digest: 5c8a46184185ddbf91cb45938fd11a396df1ab0168d2b8977f89131f9f39248f
+    name: phpkube
+    type: application
+    urls:
+    - https://phpkube.github.io/charts/phpkube.tgz
+    version: 0.1.0
+generated: "2020-04-11T19:08:49.172892139+06:30"
