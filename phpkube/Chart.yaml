@@ -19,3 +19,11 @@ version: 0.1.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
 appVersion: 0.0.1
+
+dependencies: # A list of the chart requirements (optional)
+  - name: nginx
+    version: 0.1.0
+    repository: https://phpkube.github.io/charts
+  - name: php-fpm
+    version: 0.1.0
+    repository: https://phpkube.github.io/charts
