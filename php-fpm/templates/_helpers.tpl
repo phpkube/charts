@@ -61,7 +61,3 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-
-{{- define "phpkube.fullname" -}}
-{{ printf "%s" include "phpkube.fullname" | "phpkube" }}
-{{- end -}}
