@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.global.phpkubeReleaseName -}}-data
+  name: {{ .Release.Name -}}-data
 spec:
   volumeMode: Filesystem
   resources:

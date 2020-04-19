@@ -57,4 +57,4 @@ spec:
       volumes:
       - name: phpkube-data
         persistentVolumeClaim:
-          claimName: {{ .Values.global.phpkubeReleaseName -}}-data
+          claimName: {{ .Release.Name -}}-data

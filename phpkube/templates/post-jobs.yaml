@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "phpkube.fullname" . }}-post
+  labels:
+    {{- include "phpkube.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  ttlSecondsAfterFinished: 30
+  backoffLimit: 4
+  template:
+    metadata:
+      annotations:
+        checksum/gitclone: {{ include (print $.Template.BasePath "/gitclone-cm.yaml") . | sha256sum }}
+        checksum/scripts: {{ include (print $.Template.BasePath "/cm.yaml") . | sha256sum }}
+    spec:      
+      containers:
+      - name: default
+        image: busybox
+        {{ if .Values.laravel.enabled -}}
+        command: {{ .Values.laravel.command | toJson }}
+        {{ else -}}
+        command: [ "/bin/sh", "-c", "echo Hello PHPKube"]
+        {{ end -}}
+        workingDir: "/home/html"
+        volumeMounts:
+        - name: phpkube-data
+          mountPath: "/home/"
+        {{ if .Values.laravel.enabled -}}
+        - name: laravel-env
+          mountPath: "/home/.env"
+          subPath: ".env"
+        {{- end }}
+      restartPolicy: Never
+      volumes:
+      - name: phpkube-data
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name -}}-data
+      {{ if .Values.laravel.enabled -}}
+      - name: laravel-env
+        configMap: 
+          defaultMode: 0555
+          name: {{ include "phpkube.fullname" . }}-laravel-env
+      {{ end -}}
+  

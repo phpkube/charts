@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nginx.fullname" . }}-default-conf
+  labels:
+    {{- include "nginx.labels" . | nindent 4 }}
+data:
+  default.conf: |-
+    server {
+        listen       8080;
+        server_name  _;
+
+        charset utf-8;
+
+        access_log  /home/phpkube/log/access.log  main;
+
+        root   /home/phpkube/html/public;
+        index  index.php index.html;
+
+        location / {
+            try_files $uri $uri/ /index.php?$args;
+        }
+
+        location /nginx_status {
+          stub_status on;
+          access_log   off;
+          allow 127.0.0.1;
+          allow 192.168.0.0/16;
+          allow 172.16.0.0/16;
+          allow 10.0.0.0/8;
+          deny all;
+        }
+
+        # error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        # error_page   500 502 503 504  /50x.html;
+        # location = /50x.html {
+        #     root   /usr/share/nginx/html;
+        # }
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        location ~ \.php$ {
+            try_files $uri =404;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            
+            fastcgi_pass {{ include "phpfpm.service" . -}}:9000;
+            fastcgi_index index.php;
+            fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param  PATH_INFO          $fastcgi_path_info;
+            fastcgi_param  PATH_TRANSLATED    $document_root$fastcgi_path_info;
+            include /etc/nginx/fastcgi_params;
+            fastcgi_param  PHP_SELF $fastcgi_script_name;
+        }
+
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        location ~ /\.ht* {
+            deny  all;
+        }
+    }

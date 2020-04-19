@@ -10,8 +10,63 @@ git:
   branch: master
 
 jobs:
+  pre: true
+  post: true
   composer: true
   npm: true
+
+laravel:
+  enabled: true
+  command:
+    - "/bin/sh"
+    - "-c"
+    - "cp -rf /home/.env /home/html/.env"
+  app:
+    name: laravel
+    env: local
+    key:
+    debug: true
+  log:
+    channel: stack
+  db:
+    connection: mysql
+    host: 127.0.0.1
+    port: 3306
+    database: laravel
+    username: root
+    password:
+  broadcast:
+    driver: log
+  cache:
+    driver: file
+  session:
+    driver: file
+    lifetime: 120
+  redis:
+    host: 127.0.0.1
+    password: null
+    port: 6379
+  mail:
+    driver: smtp
+    host: smtp.mailtrap.io
+    port: 2525
+    username: null
+    password: null
+    encryption: null
+  aws:
+    accessKeyId:
+    secretAccessKey:
+    defaultRegion: ap-southeast-1
+    bucket:
+  pusher:
+    app:
+      id:
+      key:
+      secret:
+      cluster: mt1
+
+
+
 
 global:
   phpkubeReleaseName: "phpkube"
