@@ -1,9 +1,23 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "phpkube.fullname" . }}
+  name: {{ include "phpkube.fullname" . }}-pre
+  labels:
+    {{- include "phpkube.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
+  ttlSecondsAfterFinished: 30
+  backoffLimit: 4
   template:
+    metadata:
+      annotations:
+        checksum/gitclone: {{ include (print $.Template.BasePath "/gitclone-cm.yaml") . | sha256sum }}
+        checksum/scripts: {{ include (print $.Template.BasePath "/cm.yaml") . | sha256sum }}
     spec:
       initContainers:
       - name: gitclone
@@ -17,7 +31,10 @@ spec:
             - name: gitclone-sh
               mountPath: "/home/gitclone.sh"
               subPath: "gitclone.sh"              
-      containers:
+      containers:  
+      - name: default
+        image: busybox
+        command: [ "/bin/sh", "-c", "echo Hello PHPKube"]
       {{- if .Values.jobs.composer }}
       - name: composer
         image: composer
@@ -46,7 +63,7 @@ spec:
       volumes:
       - name: phpkube-data
         persistentVolumeClaim:
-          claimName: {{ .Values.global.phpkubeReleaseName -}}-data
+          claimName: {{ .Release.Name -}}-data
       - name: gitclone-sh
         configMap: 
           defaultMode: 0555
@@ -55,4 +72,3 @@ spec:
         configMap:
           defaultMode: 0555 
           name: {{ include "phpkube.fullname" . }}-scripts
-  backoffLimit: 4
