@@ -61,3 +61,11 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "phpfpm.service" -}}
+{{- if .Values.phpfpm.release -}}
+	{{- printf "%s-%s" .Values.phpfpm.release "php-fpm" | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+	{{- printf "%s-%s" .Release.Name "php-fpm" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
