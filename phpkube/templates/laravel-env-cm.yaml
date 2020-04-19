@@ -1,0 +1,51 @@
+{{- if .Values.laravel.enabled -}}
+kind: ConfigMap
+metadata:
+  name: {{ include "phpkube.fullname" . -}}-laravel-env
+  namespace: phpkube
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+apiVersion: v1
+data:
+  .env: |
+    APP_NAME={{- .Values.laravel.app.name }}
+    APP_ENV={{- .Values.laravel.app.env }}
+    APP_KEY=
+    APP_DEBUG={{- .Values.laravel.debug }}
+    APP_URL={{- .Values.laravel.app.url }}
+    LOG_CHANNEL={{- .Values.laravel.log.channel }}
+    DB_CONNECTION={{- .Values.laravel.db.connection }}
+    DB_HOST={{- .Values.laravel.db.host }}
+    DB_PORT={{- .Values.laravel.db.port }}
+    DB_DATABASE={{- .Values.laravel.db.database }}
+    DB_USERNAME={{- .Values.laravel.db.username }}
+    DB_PASSWORD={{- .Values.laravel.db.password }}
+    BROADCAST_DRIVER={{- .Values.laravel.broadcast.driver }}
+    CACHE_DRIVER={{- .Values.laravel.cache.driver }}
+    QUEUE_CONNECTION={{- .Values.laravel.queue }}
+    SESSION_DRIVER={{- .Values.laravel.session.driver }}
+    SESSION_LIFETIME={{- .Values.laravel.session.lifetime }}
+    REDIS_HOST={{- .Values.laravel.redis.host }}
+    REDIS_PASSWORD={{- .Values.laravel.redis.password }}
+    REDIS_PORT={{- .Values.laravel.redis.port }}
+    MAIL_DRIVER={{- .Values.laravel.mail.driver }}
+    MAIL_HOST={{- .Values.laravel.mail.host }}
+    MAIL_PORT={{- .Values.laravel.mail.port }}
+    MAIL_USERNAME={{- .Values.laravel.mail.username }}
+    MAIL_PASSWORD={{- .Values.laravel.mail.password }}
+    MAIL_ENCRYPTION={{- .Values.laravel.mail.encryption }}
+    AWS_ACCESS_KEY_ID={{- .Values.laravel.aws.accessKeyId }}
+    AWS_SECRET_ACCESS_KEY={{- .Values.laravel.aws.secretAccessKey }}
+    AWS_DEFAULT_REGION={{- .Values.laravel.aws.defaultRegion }}
+    AWS_BUCKET={{- .Values.laravel.aws.bucket }}
+    PUSHER_APP_ID={{- .Values.laravel.pusher.app.id }}
+    PUSHER_APP_KEY={{- .Values.laravel.pusher.app.key }}
+    PUSHER_APP_SECRET={{- .Values.laravel.pusher.app.secret }}
+    PUSHER_APP_CLUSTER={{- .Values.laravel.pusher.app.cluster }}
+    MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+    MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+{{- end -}}
