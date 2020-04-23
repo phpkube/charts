@@ -3,41 +3,41 @@ entries:
   nginx:
   - apiVersion: v2
     appVersion: latest
-    created: "2020-04-19T23:47:39.294838581+06:30"
+    created: "2020-04-24T00:24:36.442819878+06:30"
     description: A Helm chart for Kubernetes
-    digest: e2a7fa45df19e3874b16301d8f9a10c2ddad803f812dc5155c44cdb69d769311
+    digest: 80d39190e2086f1ee257ba32dc64c413055e9658e304531b2a3fa163db743d60
     name: nginx
     type: application
     urls:
     - nginx.tgz
-    version: 0.1.1
+    version: 0.1.2
   php-fpm:
   - apiVersion: v2
     appVersion: latest
-    created: "2020-04-19T23:47:39.295153114+06:30"
+    created: "2020-04-24T00:24:36.443169365+06:30"
     description: A Helm chart for Kubernetes
-    digest: ad171876c4939e3e778a0cb1d71fe652f3dad1d7462961aea4e54027221de16c
+    digest: 6fd780657fb672b965d9ede3cb978035796e077496cfdc72c4be3923e1133437
     name: php-fpm
     type: application
     urls:
     - php-fpm.tgz
-    version: 0.1.2
+    version: 0.1.3
   phpkube:
   - apiVersion: v2
-    appVersion: 0.0.1
-    created: "2020-04-19T23:47:39.296447574+06:30"
+    appVersion: 0.0.2
+    created: "2020-04-24T00:24:36.445494736+06:30"
     dependencies:
     - name: nginx
       repository: https://phpkube.github.io/charts
-      version: 0.1.1
+      version: 0.1.2
     - name: php-fpm
       repository: https://phpkube.github.io/charts
-      version: 0.1.2
+      version: 0.1.3
     description: Main Helm chart for phpkube
-    digest: 1583a1fdccc9debca5e998e80ac9a62133ff303d185d1b248c83a1284959216e
+    digest: cae3c37f9e04dc478cc3a9bf3341da743690997c0dde57f5a01c2abbee4a3cf3
     name: phpkube
     type: application
     urls:
     - phpkube.tgz
     version: 0.1.0
-generated: "2020-04-19T23:47:39.294335374+06:30"
+generated: "2020-04-24T00:24:36.442224772+06:30"
