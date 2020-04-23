@@ -8,7 +8,7 @@ metadata:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   ttlSecondsAfterFinished: 30
@@ -16,8 +16,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/gitclone: {{ include (print $.Template.BasePath "/gitclone-cm.yaml") . | sha256sum }}
-        checksum/scripts: {{ include (print $.Template.BasePath "/cm.yaml") . | sha256sum }}
+        checksum/gitclone: {{ include "phpkube.gitcloneCmSha" . }}
+        checksum/scripts: {{ include "phpkube.cmSha" . }}
+        checksum/env: {{ include "phpkube.envSha" . }}
     spec:
       initContainers:
       - name: gitclone

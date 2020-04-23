@@ -61,3 +61,15 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "phpkube.gitcloneCmSha" -}}
+	{{ include (print $.Template.BasePath "/gitclone-cm.yaml") . | sha256sum }}
+{{- end -}}
+
+{{- define "phpkube.cmSha" -}}
+	{{ include (print $.Template.BasePath "/cm.yaml") . | sha256sum }}
+{{- end -}}
+
+{{- define "phpkube.envSha" -}}
+	{{ include (print $.Template.BasePath "/laravel-env-cm.yaml") . | sha256sum }}
+{{- end -}}

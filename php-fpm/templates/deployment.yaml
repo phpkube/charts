@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         {{- include "php-fpm.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/gitclone: {{ include "phpkube.gitcloneCmSha" . }}
+        checksum/scripts: {{ include "phpkube.cmSha" . }}
+        checksum/env: {{ include "phpkube.envSha" . }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
