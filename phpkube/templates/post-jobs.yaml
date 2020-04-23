@@ -8,7 +8,7 @@ metadata:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-4"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   ttlSecondsAfterFinished: 30
@@ -16,11 +16,22 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/gitclone: {{ include (print $.Template.BasePath "/gitclone-cm.yaml") . | sha256sum }}
-        checksum/scripts: {{ include (print $.Template.BasePath "/cm.yaml") . | sha256sum }}
-    spec:      
+        checksum/gitclone: {{ include "phpkube.gitcloneCmSha" . }}
+        checksum/scripts: {{ include "phpkube.cmSha" . }}
+        checksum/env: {{ include "phpkube.envSha" . }}
+    spec:
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: default
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
         image: busybox
         {{ if .Values.laravel.enabled -}}
         command: {{ .Values.laravel.command | toJson }}
@@ -44,7 +55,7 @@ spec:
       {{ if .Values.laravel.enabled -}}
       - name: laravel-env
         configMap: 
-          defaultMode: 0555
+          defaultMode: 0750
           name: {{ include "phpkube.fullname" . }}-laravel-env
       {{ end -}}
   

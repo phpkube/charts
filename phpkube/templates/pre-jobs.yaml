@@ -16,8 +16,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/gitclone: {{ include (print $.Template.BasePath "/gitclone-cm.yaml") . | sha256sum }}
-        checksum/scripts: {{ include (print $.Template.BasePath "/cm.yaml") . | sha256sum }}
+        checksum/gitclone: {{ include "phpkube.gitcloneCmSha" . }}
+        checksum/scripts: {{ include "phpkube.cmSha" . }}
+        checksum/env: {{ include "phpkube.envSha" . }}
     spec:
       initContainers:
       - name: gitclone
