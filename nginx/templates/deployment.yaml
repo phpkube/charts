@@ -14,6 +14,8 @@ spec:
       labels:
         {{- include "nginx.selectorLabels" . | nindent 8 }}
       annotations:
+        checksum/default-conf: {{ include (print $.Template.BasePath "/default-cm.yaml") . | sha256sum }}
+        checksum/nginx-conf: {{ include (print $.Template.BasePath "/nginx-cm.yaml") . | sha256sum }}
         checksum/gitclone: {{ include "phpkube.gitcloneCmSha" . }}
         checksum/scripts: {{ include "phpkube.cmSha" . }}
         checksum/env: {{ include "phpkube.envSha" . }}
